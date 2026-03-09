@@ -109,26 +109,26 @@ int main(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /* Configure the GPIO_LED pin */
-  GPIO_InitTypeDef  gpio_init_structure;
+  GPIO_InitTypeDef  gpio_init_structure_led;
 
-  gpio_init_structure.Pin   = GPIO_PIN_0;
-  gpio_init_structure.Mode  = GPIO_MODE_OUTPUT_PP;
-  gpio_init_structure.Pull  = GPIO_NOPULL;
-  gpio_init_structure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  gpio_init_structure_led.Pin   = GPIO_PIN_0;
+  gpio_init_structure_led.Mode  = GPIO_MODE_OUTPUT_PP;
+  gpio_init_structure_led.Pull  = GPIO_NOPULL;
+  gpio_init_structure_led.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 
-  HAL_GPIO_Init(GPIOB, &gpio_init_structure);
+  HAL_GPIO_Init(GPIOB, &gpio_init_structure_led);
 
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
 
   /* Configure Button pin as input */
-  GPIO_InitTypeDef gpio_init_structure;
+  GPIO_InitTypeDef gpio_init_structure_button;
 
-  gpio_init_structure.Pin = GPIO_PIN_13;
-  gpio_init_structure.Mode = GPIO_MODE_INPUT;
-  gpio_init_structure.Pull = GPIO_PULLDOWN;
-  gpio_init_structure.Speed = GPIO_SPEED_FREQ_HIGH;
+  gpio_init_structure_button.Pin = GPIO_PIN_13;
+  gpio_init_structure_button.Mode = GPIO_MODE_INPUT;
+  gpio_init_structure_button.Pull = GPIO_PULLDOWN;
+  gpio_init_structure_button.Speed = GPIO_SPEED_FREQ_HIGH;
 
-  HAL_GPIO_Init(GPIOC, &gpio_init_structure);
+  HAL_GPIO_Init(GPIOC, &gpio_init_structure_button);
 
   GPIO_PinState prev_state = GPIO_PIN_RESET; // Previous button state
   GPIO_PinState curr_state = GPIO_PIN_RESET; // Current button state
@@ -137,7 +137,7 @@ int main(void)
   while (1)
   {
     curr_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
-    
+
     if (curr_state == GPIO_PIN_SET && prev_state == GPIO_PIN_RESET)
     {
       HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);      
