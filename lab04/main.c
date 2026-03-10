@@ -213,6 +213,13 @@ int main(void)
   /* Infinite loop */
   while (1)
   {
+	if (__HAL_TIM_GET_FLAG(&TimHandle_buzz, TIM_FLAG_UPDATE))
+	{
+		__HAL_TIM_CLEAR_FLAG(&TimHandle_buzz, TIM_FLAG_UPDATE);
+		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);
+	}
+
+
     if (__HAL_TIM_GET_FLAG(&TimHandle, TIM_FLAG_UPDATE))
     {
       __HAL_TIM_CLEAR_FLAG(&TimHandle, TIM_FLAG_UPDATE);
@@ -225,7 +232,7 @@ int main(void)
       else
       {
     	  __HAL_TIM_SET_AUTORELOAD(&TimHandle_buzz, 7408);
-    	  i = 1;
+    	  i = 0;
       }
 
     }
