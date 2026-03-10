@@ -117,10 +117,10 @@ int main(void)
 
   GPIO_InitTypeDef  gpio_init_structure;
 
-   gpio_init_structure_led.Pin   = GPIO_PIN_15;
-   gpio_init_structure_led.Mode  = GPIO_MODE_OUTPUT_PP;
-   gpio_init_structure_led.Pull  = GPIO_NOPULL;
-   gpio_init_structure_led.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+   gpio_init_structure.Pin   = GPIO_PIN_15;
+   gpio_init_structure.Mode  = GPIO_MODE_OUTPUT_PP;
+   gpio_init_structure.Pull  = GPIO_NOPULL;
+   gpio_init_structure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 
    HAL_GPIO_Init(GPIOB, &gpio_init_structure);
 
