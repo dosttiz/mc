@@ -28,10 +28,10 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Definition for TIMx clock resources */
-#define TIM3                           TIM3
+// #define TIM3                           TIM3
 #define TIM3_CLK_ENABLE()              __HAL_RCC_TIM3_CLK_ENABLE()
 
-#define TIM4                           TIM4
+// #define TIM4                           TIM4
 #define TIM4_CLK_ENABLE()              __HAL_RCC_TIM4_CLK_ENABLE()
 /* Exported functions ------------------------------------------------------- */
 
