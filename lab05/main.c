@@ -210,13 +210,13 @@ uint32_t RGB_Get_Dist()
       if (uhCaptureIndex == 0)
       {
         /* Get the 1st Input Capture value */
-        uwIC4Value1 = HAL_TIM_ReadCapturedValue(&TimHandle, TIM_CHANNEL_4);
+        uwIC4Value1 = HAL_TIM_ReadCapturedValue(&TimHandle, TIM_CHANNEL_2);
         uhCaptureIndex = 1;
       }
       else if (uhCaptureIndex == 1)
       {
         /* Get the 2nd Input Capture value */
-        uwIC4Value2 = HAL_TIM_ReadCapturedValue(&TimHandle, TIM_CHANNEL_4);
+        uwIC4Value2 = HAL_TIM_ReadCapturedValue(&TimHandle, TIM_CHANNEL_2);
 
         /* Capture computation */
         if (uwIC4Value2 > uwIC4Value1)
