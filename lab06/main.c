@@ -75,6 +75,18 @@ static void setDutyCycle(TIM_HandleTypeDef* const htim, uint32_t channel, float 
 	__HAL_TIM_SET_COMPARE(htim, channel, pw_desired);
 }
 
+static void Tone(uint32_t Frequency, uint32_t Duration)
+{
+    TIM2->ARR = (10000000UL / Frequency) - 1; // Set The PWM Frequency
+    TIM2->CCR1 = (TIM2->ARR >> 1); // Set Duty Cycle 50%
+    HAL_Delay(Duration); // Wait For The Tone Duration
+}
+ 
+static void noTone()
+{
+    TIM2->CCR1 = 0; // Set Duty Cycle 0%
+}
+
 
 
 
