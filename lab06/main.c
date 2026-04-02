@@ -147,6 +147,7 @@ int main(void)
 
   /* Add Cortex-M7 user application code here */
   __HAL_RCC_GPIOA_CLK_ENABLE();
+	//__HAL_RCC_GPIOB_CLK_ENABLE();
 
   GPIO_InitTypeDef  gpio_init_structure;
 
@@ -207,14 +208,14 @@ int main(void)
   sConfig.OCNPolarity  = TIM_OCNPOLARITY_HIGH;
   sConfig.OCNIdleState = TIM_OCNIDLESTATE_RESET;
   sConfig.OCIdleState  = TIM_OCIDLESTATE_RESET;
-  if (HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1) != HAL_OK)
+  if (HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_2) != HAL_OK)
   {
     /* Configuration Error */
     Error_Handler();
   }
 
   /*##-3- Start PWM signals generation #######################################*/
-  if (HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1) != HAL_OK)
+  if (HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_2) != HAL_OK)
   {
     /* PWM generation Error */
     Error_Handler();
@@ -226,26 +227,26 @@ int main(void)
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
     for (volatile int i = 0; i < 26; i++) {
       HAL_Delay(50);
-      setDutyCycle(&TimHandle, TIM_CHANNEL_1, i);
+      setDutyCycle(&TimHandle, TIM_CHANNEL_2, i);
     }
     HAL_Delay(3000);
   
     for (volatile int i = 25; i > -1; i--) {
       HAL_Delay(50);
-      setDutyCycle(&TimHandle, TIM_CHANNEL_1, i);
+      setDutyCycle(&TimHandle, TIM_CHANNEL_2, i);
     }
 
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
 
     for (volatile int i = 0; i < 26; i++) {
       HAL_Delay(50);
-      setDutyCycle(&TimHandle, TIM_CHANNEL_1, i);
+      setDutyCycle(&TimHandle, TIM_CHANNEL_2, i);
     }
     HAL_Delay(3000);
   
     for (volatile int i = 25; i > -1; i--) {
       HAL_Delay(50);
-      setDutyCycle(&TimHandle, TIM_CHANNEL_1, i);
+      setDutyCycle(&TimHandle, TIM_CHANNEL_2, i);
     }
     
 
