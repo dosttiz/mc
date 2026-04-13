@@ -1,3 +1,23 @@
+/**
+  ******************************************************************************
+  * @file    Templates/BootCM4_CM7/CM4/Src/stm32h7xx_it.c
+  * @author  MCD Application Team
+  * @brief   Main Interrupt Service Routines for Cortex-M4.
+  *          This file provides template for all exceptions handler and 
+  *          peripherals interrupt service routine.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2018 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h7xx_it.h"
 #include "main.h"
@@ -18,11 +38,11 @@
 /* Private functions ---------------------------------------------------------*/
 
 /******************************************************************************/
-/*            Cortex-M7 Processor Exceptions Handlers                         */
+/*            Cortex-M4 Processor Exceptions Handlers                         */
 /******************************************************************************/
 
 /**
-  * @brief  This function handles NMI exception.
+  * @brief   This function handles NMI exception.
   * @param  None
   * @retval None
   */
@@ -119,8 +139,6 @@ void SysTick_Handler(void)
   HAL_IncTick();
 }
 
-
-
 /******************************************************************************/
 /*                 STM32H7xx Peripherals Interrupt Handlers                   */
 /*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
@@ -137,15 +155,6 @@ void SysTick_Handler(void)
 {
 }*/
 
-/**
-  * @brief  This function handles external lines 15 to 10 interrupt request.
-  * @param  None
-  * @retval None
-  */
-void EXTI15_10_IRQHandler(void)
-{
-  HAL_GPIO_EXTI_IRQHandler(BUTTON_USER_PIN);
-}
 
 /**
   * @}
