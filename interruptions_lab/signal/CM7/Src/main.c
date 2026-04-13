@@ -85,6 +85,9 @@ int main(void)
   TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
   TimHandle.Init.RepetitionCounter = 0;
 
+
+  // ANOTHER INTERRUPTION MAY OCCUR WHEN HANDLERS ARE WORKING!!!!
+
   if (HAL_TIM_Base_Init(&TimHandle) != HAL_OK)
   {
     /* Initialization Error */
