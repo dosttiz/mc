@@ -2,6 +2,9 @@
 #include "stm32h7xx_it.h"
 #include "main.h"
 
+
+extern TIM_HandleTypeDef TimHandle;
+
 /** @addtogroup STM32H7xx_HAL_Examples
   * @{
   */

@@ -17,6 +17,12 @@
 /* Definition for TIMx's NVIC */
 #define TIMx_IRQn                      TIM3_IRQn
 #define TIMx_IRQHandler                TIM3_IRQHandler
+
+
+#define SOUND_USER_PIN                  GPIO_PIN_3
+
+
+
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
