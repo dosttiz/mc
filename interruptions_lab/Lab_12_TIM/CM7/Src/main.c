@@ -1,31 +1,7 @@
-/**
-  ******************************************************************************
-  * @file    Templates/BootCM4_CM7/CM7/Src/main.c
-  * @author  MCD Application Team
-  * @brief   Main program body for Cortex-M7.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2018 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-/** @addtogroup STM32H7xx_HAL_Examples
-  * @{
-  */
-
-/** @addtogroup Templates
-  * @{
-  */
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -44,69 +20,30 @@ static void CPU_CACHE_Enable(void);
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 
-
 /* Private functions ---------------------------------------------------------*/
 
-/**
-  * @brief  Main program
-  * @param  None
-  * @retval None
-  */
 int main(void)
 {
   int32_t timeout;
-
-  /* System Init, System clock, voltage scaling and L1-Cache configuration are done by CPU1 (Cortex-M7)
-     in the meantime Domain D2 is put in STOP mode(Cortex-M4 in deep-sleep)
-  */
-
-  /* Configure the MPU attributes */
   MPU_Config();
-
-  /* Enable the CPU Cache */
   CPU_CACHE_Enable();
-
-  /* Wait until CPU2 boots and enters in stop mode or timeout*/
   timeout = 0xFFFF;
   while((__HAL_RCC_GET_FLAG(RCC_FLAG_D2CKRDY) != RESET) && (timeout-- > 0));
   if ( timeout < 0 )
   {
     Error_Handler();
   }
-
- /* STM32H7xx HAL library initialization:
-       - Systick timer is configured by default as source of time base, but user
-         can eventually implement his proper time base source (a general purpose
-         timer for example or other time source), keeping in mind that Time base
-         duration should be kept 1ms since PPP_TIMEOUT_VALUEs are defined and
-         handled in milliseconds basis.
-       - Set NVIC Group Priority to 4
-       - Low Level Initialization
-     */
   HAL_Init();
-
-  /* Configure the system clock to 400 MHz */
   SystemClock_Config();
-
-  /* When system initialization is finished, Cortex-M7 will release Cortex-M4  by means of
-     HSEM notification */
-
-  /*HW semaphore Clock enable*/
   __HAL_RCC_HSEM_CLK_ENABLE();
-
-  /*Take HSEM */
   HAL_HSEM_FastTake(HSEM_ID_0);
-  /*Release HSEM in order to notify the CPU2(CM4)*/
   HAL_HSEM_Release(HSEM_ID_0,0);
-
-  /* wait until CPU2 wakes up from stop mode */
   timeout = 0xFFFF;
   while((__HAL_RCC_GET_FLAG(RCC_FLAG_D2CKRDY) == RESET) && (timeout-- > 0));
   if ( timeout < 0 )
   {
     Error_Handler();
   }
-
   /* Add Cortex-M7 user application code here */
 
   /* Configure LED1 */
