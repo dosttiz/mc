@@ -86,7 +86,6 @@ int main(void)
   TimHandle.Init.RepetitionCounter = 0;
 
 
-  // ANOTHER INTERRUPTION MAY OCCUR WHEN HANDLERS ARE WORKING!!!!
 
   if (HAL_TIM_Base_Init(&TimHandle) != HAL_OK)
   {
@@ -108,6 +107,7 @@ int main(void)
   }
 }
 
+
 static void EXTI3_IRQHandler_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
@@ -125,18 +125,15 @@ static void EXTI3_IRQHandler_Config(void)
   HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 }
 
-/**
-  * @brief EXTI line detection callbacks
-  * @param GPIO_Pin: Specifies the pins connected EXTI line
-  * @retval None
-  */
+
+  // ANOTHER INTERRUPTION MAY OCCUR WHEN HANDLERS ARE WORKING!!!!
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if (GPIO_Pin == GPIO_PIN_3)
   {
     SignalState = 1;
     BSP_LED_Toggle(LED1);
-
+    HAL_NVIC_DisableIRQ(EXTI3_IRQn);
     while (SignalState);
   }
 }
@@ -148,6 +145,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   __HAL_TIM_CLEAR_FLAG(&TimHandle, TIM_FLAG_UPDATE);
   BSP_LED_Toggle(LED1);
   SignalState = 0;
+  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 }
 
 
