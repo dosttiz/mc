@@ -6,23 +6,22 @@
 #define HSEM_ID_0 (0U) /* HW semaphore 0*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-__IO uint32_t ButtonState = 0;
+__IO uint32_t SignalState = 0;
 
-/* Private function prototypes -----------------------------------------------*/
+/* TIM handle declaration */
+TIM_HandleTypeDef TimHandle;
+
+/* Prescaler declaration */
+uint32_t uwPrescalerValue = 0;
+
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 
-static void EXTI15_10_IRQHandler_Config(void);
+static void EXTI3_IRQHandler_Config(void);
 
-/* Private functions ---------------------------------------------------------*/
 
-/**
-  * @brief  Main program
-  * @param  None
-  * @retval None
-  */
 int main(void)
 {
   int32_t timeout;
@@ -45,15 +44,6 @@ int main(void)
     Error_Handler();
   }
 
- /* STM32H7xx HAL library initialization:
-       - Systick timer is configured by default as source of time base, but user
-         can eventually implement his proper time base source (a general purpose
-         timer for example or other time source), keeping in mind that Time base
-         duration should be kept 1ms since PPP_TIMEOUT_VALUEs are defined and
-         handled in milliseconds basis.
-       - Set NVIC Group Priority to 4
-       - Low Level Initialization
-     */
   HAL_Init();
 
   /* Configure the system clock to 400 MHz */
@@ -80,52 +70,56 @@ int main(void)
 
   /* Add Cortex-M7 user application code here */
 
-  /*
-   * In this example, one EXTI line (EXTI15_10) is configured to generate
-   * an interrupt on each rising edge.
-   * In the interrupt routine a led connected to a specific GPIO pin is toggled.
-   * EXTI15_10 is connected to PC.13 pin (User push-button)
-   */
-
   BSP_LED_Init(LED1);
 
-  /* Configure EXTI15_10 (connected to PC.13 pin) in interrupt mode */
-  EXTI15_10_IRQHandler_Config();
+  /*##-1- Configure the TIM peripheral #######################################*/
+  /* Compute the prescaler value to have TIMx counter clock equal to 10000 Hz */
+  uwPrescalerValue = (uint32_t)(SystemCoreClock / (2*10000)) - 1;
+
+  /* Set TIMx instance */
+  TimHandle.Instance = TIMx;
+
+  TimHandle.Init.Period            = 10000 - 1;
+  TimHandle.Init.Prescaler         = uwPrescalerValue;
+  TimHandle.Init.ClockDivision     = 0;
+  TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
+  TimHandle.Init.RepetitionCounter = 0;
+
+  if (HAL_TIM_Base_Init(&TimHandle) != HAL_OK)
+  {
+    /* Initialization Error */
+    Error_Handler();
+  }
+  // IRQ PA3 HANDLER
+  EXTI3_IRQHandler_Config();
+
+  if (HAL_TIM_Base_Start_IT(&TimHandle) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
 
   /* Infinite loop */
   while (1)
   {
-    if(ButtonState != 0)
-    {
-     /* Toggle LED1 */
-      BSP_LED_Toggle(LED1);
-      ButtonState = 0;
-      HAL_Delay(5); /* to avoid bounce when button pressed */
-    }
   }
 }
 
-/**
-  * @brief  Configures EXTI lines 15 to 10 (connected to PC.13 pin) in interrupt mode
-  * @param  None
-  * @retval None
-  */
-static void EXTI15_10_IRQHandler_Config(void)
+static void EXTI3_IRQHandler_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
 
   /* Enable GPIOC clock */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /* Configure PC.13 pin as input floating */
   GPIO_InitStructure.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStructure.Pull = GPIO_NOPULL;
-  GPIO_InitStructure.Pin = GPIO_PIN_13;
+  GPIO_InitStructure.Pin = GPIO_PIN_3;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-  /* Enable and set EXTI lines 15 to 10 Interrupt */
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 2, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 4, 0);
+  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 }
 
 /**
@@ -135,10 +129,22 @@ static void EXTI15_10_IRQHandler_Config(void)
   */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  if (GPIO_Pin == GPIO_PIN_13)
+  if (GPIO_Pin == GPIO_PIN_3)
   {
-    ButtonState = 1;
+    SignalState = 1;
+    BSP_LED_Toggle(LED1);
+
+    while (SignalState);
   }
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  if (!SignalState)
+    return;
+  __HAL_TIM_CLEAR_FLAG(&TimHandle, TIM_FLAG_UPDATE);
+  BSP_LED_Toggle(LED1);
+  SignalState = 0;
 }
 
 

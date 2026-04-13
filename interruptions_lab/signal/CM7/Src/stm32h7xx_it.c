@@ -136,17 +136,17 @@ void SysTick_Handler(void)
 /*void PPP_IRQHandler(void)
 {
 }*/
-
-/**
-  * @brief  This function handles external lines 15 to 10 interrupt request.
-  * @param  None
-  * @retval None
-  */
-void EXTI15_10_IRQHandler(void)
+/********************************************** */
+void EXTI3_IRQHandler(void)
 {
-  HAL_GPIO_EXTI_IRQHandler(BUTTON_USER_PIN);
+  HAL_GPIO_EXTI_IRQHandler(SOUND_USER_PIN);
 }
 
+void TIMx_IRQHandler(void)
+{
+  HAL_TIM_IRQHandler(&TimHandle);
+}
+/* ************************************************** */
 /**
   * @}
   */

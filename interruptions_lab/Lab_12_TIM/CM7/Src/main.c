@@ -91,28 +91,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   BSP_LED_Toggle(LED1);
 }
 
-/**
-  * @brief  System Clock Configuration
-  *         The system Clock is configured as follow : 
-  *            System Clock source            = PLL (HSE BYPASS)
-  *            SYSCLK(Hz)                     = 400000000 (CPU Clock)
-  *            HCLK(Hz)                       = 200000000 (Cortex-M4 CPU, Bus matrix Clocks)
-  *            AHB Prescaler                  = 2
-  *            D1 APB3 Prescaler              = 2 (APB3 Clock  100MHz)
-  *            D2 APB1 Prescaler              = 2 (APB1 Clock  100MHz)
-  *            D2 APB2 Prescaler              = 2 (APB2 Clock  100MHz)
-  *            D3 APB4 Prescaler              = 2 (APB4 Clock  100MHz)
-  *            HSE Frequency(Hz)              = 8000000
-  *            PLL_M                          = 4
-  *            PLL_N                          = 400
-  *            PLL_P                          = 2
-  *            PLL_Q                          = 4
-  *            PLL_R                          = 2
-  *            VDD(V)                         = 3.3
-  *            Flash Latency(WS)              = 4
-  * @param  None
-  * @retval None
-  */
 static void SystemClock_Config(void)
 {
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
