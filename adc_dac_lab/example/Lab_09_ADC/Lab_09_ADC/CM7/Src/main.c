@@ -1,32 +1,6 @@
-/**
-  ******************************************************************************
-  * @file    Templates/BootCM4_CM7/CM7/Src/main.c
-  * @author  MCD Application Team
-  * @brief   Main program body for Cortex-M7.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2018 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
-
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include <stdio.h>
-
-/** @addtogroup STM32H7xx_HAL_Examples
-  * @{
-  */
-
-/** @addtogroup Templates
-  * @{
-  */
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -58,11 +32,6 @@ int __io_putchar(int ch)
   return(ch);
 }
 
-/**
-  * @brief  Main program
-  * @param  None
-  * @retval None
-  */
 int main(void)
 {
   int32_t timeout;
@@ -288,31 +257,8 @@ static void SystemClock_Config(void)
     Error_Handler();
   }
 
-  /*
-  Note : The activation of the I/O Compensation Cell is recommended with communication  interfaces
-          (GPIO, SPI, FMC, QSPI ...)  when  operating at  high frequencies(please refer to product datasheet)
-          The I/O Compensation Cell activation  procedure requires :
-        - The activation of the CSI clock
-        - The activation of the SYSCFG clock
-        - Enabling the I/O Compensation Cell : setting bit[0] of register SYSCFG_CCCSR
-
-          To do this please uncomment the following code
-  */
-
-  /*
-  __HAL_RCC_CSI_ENABLE() ;
-
-  __HAL_RCC_SYSCFG_CLK_ENABLE() ;
-
-  HAL_EnableCompensationCell();
-  */
 }
 
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @param  None
-  * @retval None
-  */
 static void Error_Handler(void)
 {
   /* User may add here some code to deal with this error */
@@ -321,11 +267,6 @@ static void Error_Handler(void)
   }
 }
 
-/**
-  * @brief  CPU L1-Cache enable.
-  * @param  None
-  * @retval None
-  */
 static void CPU_CACHE_Enable(void)
 {
   /* Enable I-Cache */
@@ -335,11 +276,6 @@ static void CPU_CACHE_Enable(void)
   SCB_EnableDCache();
 }
 
-/**
-  * @brief  Configure the MPU attributes
-  * @param  None
-  * @retval None
-  */
 static void MPU_Config(void)
 {
   MPU_Region_InitTypeDef MPU_InitStruct;
@@ -386,12 +322,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   }
 }
 #endif
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-

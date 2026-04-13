@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file    Templates/BootCM4_CM7/CM7/Inc/main.h
+  * @file    Templates/BootCM4_CM7/CM7/Inc/stm32h7xx_it.h
   * @author  MCD Application Team
-  * @brief   Header for main.c module for Cortex-M7.
+  * @brief   This file contains the headers of the interrupt handlers for Cortex-M7.
   ******************************************************************************
   * @attention
   *
@@ -15,36 +15,36 @@
   *
   ******************************************************************************
   */
-  
+
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MAIN_H
-#define __MAIN_H
+#ifndef __STM32H7xx_IT_H
+#define __STM32H7xx_IT_H
+
+#ifdef __cplusplus
+ extern "C" {
+#endif 
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32h7xx_hal.h"
-#include "stm32h7xx_nucleo.h"
-
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-/* Definition for ADCx clock resources */
-#define ADCx                            ADC1
-#define ADCx_CLK_ENABLE()               __HAL_RCC_ADC12_CLK_ENABLE()
-// __HAL_RCC_ADC12_CLK_ENABLE() for enabling 3rd ADC (it is separate)
-
-#define ADCx_CHANNEL_GPIO_CLK_ENABLE()  __HAL_RCC_GPIOF_CLK_ENABLE()
-
-#define ADCx_FORCE_RESET()              __HAL_RCC_ADC12_FORCE_RESET()
-#define ADCx_RELEASE_RESET()            __HAL_RCC_ADC12_RELEASE_RESET()
-
-/* Definition for ADCx Channel Pin */
-#define ADCx_CHANNEL_PIN                GPIO_PIN_11
-#define ADCx_CHANNEL_GPIO_PORT          GPIOF
-
-/* Definition for ADCx's Channel */
-#define ADCx_CHANNEL                    ADC_CHANNEL_2
-
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-#endif /* __MAIN_H */
+void NMI_Handler(void);
+void HardFault_Handler(void);
+void MemManage_Handler(void);
+void BusFault_Handler(void);
+void UsageFault_Handler(void);
+void SVC_Handler(void);
+void DebugMon_Handler(void);
+void PendSV_Handler(void);
+void SysTick_Handler(void);
+
+void TIMx_IRQHandler(void);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __STM32H7xx_IT_H */
 

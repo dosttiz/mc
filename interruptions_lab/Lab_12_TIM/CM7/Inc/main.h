@@ -26,22 +26,13 @@
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-/* Definition for ADCx clock resources */
-#define ADCx                            ADC1
-#define ADCx_CLK_ENABLE()               __HAL_RCC_ADC12_CLK_ENABLE()
-// __HAL_RCC_ADC12_CLK_ENABLE() for enabling 3rd ADC (it is separate)
+/* Definition for TIMx clock resources */
+#define TIMx                           TIM3
+#define TIMx_CLK_ENABLE()              __HAL_RCC_TIM3_CLK_ENABLE()
 
-#define ADCx_CHANNEL_GPIO_CLK_ENABLE()  __HAL_RCC_GPIOF_CLK_ENABLE()
-
-#define ADCx_FORCE_RESET()              __HAL_RCC_ADC12_FORCE_RESET()
-#define ADCx_RELEASE_RESET()            __HAL_RCC_ADC12_RELEASE_RESET()
-
-/* Definition for ADCx Channel Pin */
-#define ADCx_CHANNEL_PIN                GPIO_PIN_11
-#define ADCx_CHANNEL_GPIO_PORT          GPIOF
-
-/* Definition for ADCx's Channel */
-#define ADCx_CHANNEL                    ADC_CHANNEL_2
+/* Definition for TIMx's NVIC */
+#define TIMx_IRQn                      TIM3_IRQn
+#define TIMx_IRQHandler                TIM3_IRQHandler
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */

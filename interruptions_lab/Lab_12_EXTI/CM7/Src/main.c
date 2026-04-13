@@ -1,16 +1,38 @@
+/**
+  ******************************************************************************
+  * @file    Templates/BootCM4_CM7/CM7/Src/main.c
+  * @author  MCD Application Team
+  * @brief   Main program body for Cortex-M7.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2018 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+
+/** @addtogroup STM32H7xx_HAL_Examples
+  * @{
+  */
+
+/** @addtogroup Templates
+  * @{
+  */
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define HSEM_ID_0 (0U) /* HW semaphore 0*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-DAC_HandleTypeDef DacHandle;
-
-static DAC_ChannelConfTypeDef sConfig;
-
-uint16_t DACValue;
+__IO uint32_t ButtonState = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 static void MPU_Config(void);
@@ -18,9 +40,15 @@ static void CPU_CACHE_Enable(void);
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 
+static void EXTI15_10_IRQHandler_Config(void);
 
 /* Private functions ---------------------------------------------------------*/
 
+/**
+  * @brief  Main program
+  * @param  None
+  * @retval None
+  */
 int main(void)
 {
   int32_t timeout;
@@ -78,53 +106,64 @@ int main(void)
 
   /* Add Cortex-M7 user application code here */
 
-  DacHandle.Instance = DACx;
+  /*
+   * In this example, one EXTI line (EXTI15_10) is configured to generate
+   * an interrupt on each rising edge.
+   * In the interrupt routine a led connected to a specific GPIO pin is toggled.
+   * EXTI15_10 is connected to PC.13 pin (User push-button)
+   */
 
-  /*##-0- DeInit the DAC peripheral ##########################################*/
+  BSP_LED_Init(LED1);
 
-   if (HAL_DAC_DeInit(&DacHandle) != HAL_OK)
-  {
-    /* DeInitialization Error */
-    Error_Handler();
-  }
-
-  /*##-1- Configure the DAC peripheral #######################################*/
-
-  if (HAL_DAC_Init(&DacHandle) != HAL_OK)
-  {
-    /* Initialization Error */
-    Error_Handler();
-  }
-
-  /*##-2- Configure DAC channel1 #############################################*/
-  sConfig.DAC_Trigger = DAC_TRIGGER_NONE;
-  sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
-
-  if (HAL_DAC_ConfigChannel(&DacHandle, &sConfig, DACx_CHANNEL) != HAL_OK)
-  {
-    /* Channel configuration Error */
-    Error_Handler();
-  }
-
-  /*##-3- Set DAC Channel1 DHR register ######################################*/
-  /* DAC output (V) = Reference Voltage * (DAC value / DAC resolution), so */
-  DACValue = 1.5 * 256 / 3.3; // Vref = 3.3V, Vout = 1.5V, 8-bit
-  if (HAL_DAC_SetValue(&DacHandle, DACx_CHANNEL, DAC_ALIGN_8B_R, DACValue) != HAL_OK)
-  {
-    /* Setting value Error */
-    Error_Handler();
-  }
-
-  /*##-4- Enable DAC Channel1 ################################################*/
-  if (HAL_DAC_Start(&DacHandle, DACx_CHANNEL) != HAL_OK)
-  {
-    /* Start Error */
-    Error_Handler();
-  }
+  /* Configure EXTI15_10 (connected to PC.13 pin) in interrupt mode */
+  EXTI15_10_IRQHandler_Config();
 
   /* Infinite loop */
   while (1)
   {
+    if(ButtonState != 0)
+    {
+     /* Toggle LED1 */
+      BSP_LED_Toggle(LED1);
+      ButtonState = 0;
+      HAL_Delay(5); /* to avoid bounce when button pressed */
+    }
+  }
+}
+
+/**
+  * @brief  Configures EXTI lines 15 to 10 (connected to PC.13 pin) in interrupt mode
+  * @param  None
+  * @retval None
+  */
+static void EXTI15_10_IRQHandler_Config(void)
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
+
+  /* Enable GPIOC clock */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+
+  /* Configure PC.13 pin as input floating */
+  GPIO_InitStructure.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStructure.Pull = GPIO_NOPULL;
+  GPIO_InitStructure.Pin = GPIO_PIN_13;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStructure);
+
+  /* Enable and set EXTI lines 15 to 10 Interrupt */
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 2, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+}
+
+/**
+  * @brief EXTI line detection callbacks
+  * @param GPIO_Pin: Specifies the pins connected EXTI line
+  * @retval None
+  */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if (GPIO_Pin == GPIO_PIN_13)
+  {
+    ButtonState = 1;
   }
 }
 

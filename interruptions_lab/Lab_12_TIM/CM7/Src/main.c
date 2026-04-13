@@ -1,16 +1,42 @@
+/**
+  ******************************************************************************
+  * @file    Templates/BootCM4_CM7/CM7/Src/main.c
+  * @author  MCD Application Team
+  * @brief   Main program body for Cortex-M7.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2018 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+
+/** @addtogroup STM32H7xx_HAL_Examples
+  * @{
+  */
+
+/** @addtogroup Templates
+  * @{
+  */
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define HSEM_ID_0 (0U) /* HW semaphore 0*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-DAC_HandleTypeDef DacHandle;
+/* TIM handle declaration */
+TIM_HandleTypeDef TimHandle;
 
-static DAC_ChannelConfTypeDef sConfig;
-
-uint16_t DACValue;
+/* Prescaler declaration */
+uint32_t uwPrescalerValue = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 static void MPU_Config(void);
@@ -21,6 +47,11 @@ static void Error_Handler(void);
 
 /* Private functions ---------------------------------------------------------*/
 
+/**
+  * @brief  Main program
+  * @param  None
+  * @retval None
+  */
 int main(void)
 {
   int32_t timeout;
@@ -78,47 +109,32 @@ int main(void)
 
   /* Add Cortex-M7 user application code here */
 
-  DacHandle.Instance = DACx;
+  /* Configure LED1 */
+  BSP_LED_Init(LED1);
 
-  /*##-0- DeInit the DAC peripheral ##########################################*/
+  /*##-1- Configure the TIM peripheral #######################################*/
+  /* Compute the prescaler value to have TIMx counter clock equal to 10000 Hz */
+  uwPrescalerValue = (uint32_t)(SystemCoreClock / (2*10000)) - 1;
 
-   if (HAL_DAC_DeInit(&DacHandle) != HAL_OK)
-  {
-    /* DeInitialization Error */
-    Error_Handler();
-  }
+  /* Set TIMx instance */
+  TimHandle.Instance = TIMx;
 
-  /*##-1- Configure the DAC peripheral #######################################*/
+  TimHandle.Init.Period            = 10000 - 1;
+  TimHandle.Init.Prescaler         = uwPrescalerValue;
+  TimHandle.Init.ClockDivision     = 0;
+  TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
+  TimHandle.Init.RepetitionCounter = 0;
 
-  if (HAL_DAC_Init(&DacHandle) != HAL_OK)
+  if (HAL_TIM_Base_Init(&TimHandle) != HAL_OK)
   {
     /* Initialization Error */
     Error_Handler();
   }
 
-  /*##-2- Configure DAC channel1 #############################################*/
-  sConfig.DAC_Trigger = DAC_TRIGGER_NONE;
-  sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
-
-  if (HAL_DAC_ConfigChannel(&DacHandle, &sConfig, DACx_CHANNEL) != HAL_OK)
+  /*##-2- Start the TIM Base generation in interrupt mode ####################*/
+  if (HAL_TIM_Base_Start_IT(&TimHandle) != HAL_OK)
   {
-    /* Channel configuration Error */
-    Error_Handler();
-  }
-
-  /*##-3- Set DAC Channel1 DHR register ######################################*/
-  /* DAC output (V) = Reference Voltage * (DAC value / DAC resolution), so */
-  DACValue = 1.5 * 256 / 3.3; // Vref = 3.3V, Vout = 1.5V, 8-bit
-  if (HAL_DAC_SetValue(&DacHandle, DACx_CHANNEL, DAC_ALIGN_8B_R, DACValue) != HAL_OK)
-  {
-    /* Setting value Error */
-    Error_Handler();
-  }
-
-  /*##-4- Enable DAC Channel1 ################################################*/
-  if (HAL_DAC_Start(&DacHandle, DACx_CHANNEL) != HAL_OK)
-  {
-    /* Start Error */
+    /* Starting Error */
     Error_Handler();
   }
 
@@ -128,6 +144,15 @@ int main(void)
   }
 }
 
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  BSP_LED_Toggle(LED1);
+}
 
 /**
   * @brief  System Clock Configuration
