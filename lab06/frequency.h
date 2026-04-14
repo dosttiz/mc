@@ -91,4 +91,36 @@
 #define NOTE_D8  4699
 #define NOTE_DS8 4978
 
+const uint32_t spider_pitch[] = {
+      
+
+
+
+
+
+
+}; // length is 166
+
+const uint32_t spider_length[] = {
+
+}; // length is 166
+
+const uint32_t megalovania_pitch[] = {
+      
+
+
+
+
+
+
+}; // length is 120
+
+const uint32_t megalovania_length[] = {
+
+}; // length is 120
+
+
+
+
+
 #endif 
