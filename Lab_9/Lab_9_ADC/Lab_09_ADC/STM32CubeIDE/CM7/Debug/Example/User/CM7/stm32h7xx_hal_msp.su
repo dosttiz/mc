@@ -1,0 +1,6 @@
+C:/STM32Cube_FW_H7_V1.11.0/Projects/ELMICORE-H745/Lab_9_ADC/Lab_09_ADC/CM7/Src/stm32h7xx_hal_msp.c:46:6:HAL_MspInit	4	static
+C:/STM32Cube_FW_H7_V1.11.0/Projects/ELMICORE-H745/Lab_9_ADC/Lab_09_ADC/CM7/Src/stm32h7xx_hal_msp.c:55:6:HAL_MspDeInit	4	static
+C:/STM32Cube_FW_H7_V1.11.0/Projects/ELMICORE-H745/Lab_9_ADC/Lab_09_ADC/CM7/Src/stm32h7xx_hal_msp.c:85:6:HAL_ADC_MspInit	48	static
+C:/STM32Cube_FW_H7_V1.11.0/Projects/ELMICORE-H745/Lab_9_ADC/Lab_09_ADC/CM7/Src/stm32h7xx_hal_msp.c:113:6:HAL_ADC_MspDeInit	16	static
+C:/STM32Cube_FW_H7_V1.11.0/Projects/ELMICORE-H745/Lab_9_ADC/Lab_09_ADC/CM7/Src/stm32h7xx_hal_msp.c:128:6:HAL_DAC_MspInit	48	static
+C:/STM32Cube_FW_H7_V1.11.0/Projects/ELMICORE-H745/Lab_9_ADC/Lab_09_ADC/CM7/Src/stm32h7xx_hal_msp.c:146:6:HAL_DAC_MspDeInit	16	static

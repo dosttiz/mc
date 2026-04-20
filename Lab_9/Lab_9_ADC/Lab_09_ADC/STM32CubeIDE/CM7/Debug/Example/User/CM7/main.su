@@ -1,0 +1,7 @@
+../../../../../../../Drivers/CMSIS/Include/core_cm7.h:2660:26:ITM_SendChar	16	static,ignoring_inline_asm
+C:/STM32Cube_FW_H7_V1.11.0/Projects/ELMICORE-H745/Lab_9_ADC/Lab_09_ADC/CM7/Src/main.c:55:5:__io_putchar	16	static
+C:/STM32Cube_FW_H7_V1.11.0/Projects/ELMICORE-H745/Lab_9_ADC/Lab_09_ADC/CM7/Src/main.c:67:5:main	48	static
+C:/STM32Cube_FW_H7_V1.11.0/Projects/ELMICORE-H745/Lab_9_ADC/Lab_09_ADC/CM7/Src/main.c:286:13:SystemClock_Config	128	static
+C:/STM32Cube_FW_H7_V1.11.0/Projects/ELMICORE-H745/Lab_9_ADC/Lab_09_ADC/CM7/Src/main.c:367:13:Error_Handler	4	static
+C:/STM32Cube_FW_H7_V1.11.0/Projects/ELMICORE-H745/Lab_9_ADC/Lab_09_ADC/CM7/Src/main.c:380:13:CPU_CACHE_Enable	24	static,ignoring_inline_asm
+C:/STM32Cube_FW_H7_V1.11.0/Projects/ELMICORE-H745/Lab_9_ADC/Lab_09_ADC/CM7/Src/main.c:394:13:MPU_Config	24	static
