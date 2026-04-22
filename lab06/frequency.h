@@ -105,7 +105,7 @@ const uint32_t spider_length[] = {
 
 }; // length is 166
 
-const uint32_t megalovania_pitch[] = {
+const uint32_t song_pitch[] = {
       
 
 
@@ -115,7 +115,7 @@ const uint32_t megalovania_pitch[] = {
 
 }; // length is 120
 
-const uint32_t megalovania_length[] = {
+const uint32_t song_length[] = {
 
 }; // length is 120
 
